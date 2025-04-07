@@ -1,35 +1,40 @@
 import streamlit as st
 import random
+import textwrap
 
-st.set_page_config(layout="centered", page_title="F4 Poster Prompt Generator")
+st.set_page_config(layout="centered")
 
-# HTML & CSS to mimic vertical F4 poster
-st.markdown(
-    """
+st.markdown("""
     <style>
-    .f4-poster-box {
-        width: 400px;
-        height: 570px;
+    .poster-box {
+        width: 595px;
+        height: 842px;
+        background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+        border: 4px solid black;
         padding: 40px;
-        margin: auto;
-        border: 2px solid #ccc;
-        border-radius: 10px;
-        background: #fefefe;
         font-family: 'Helvetica Neue', sans-serif;
-    }
-    .poster-title {
-        text-align: center;
-        font-size: 28px;
-        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     .poster-section {
-        margin-bottom: 15px;
+        margin-bottom: 30px;
+    }
+    .poster-label {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .poster-text {
+        font-size: 18px;
+        margin-top: 8px;
     }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
+st.title("🧠 F4 Poster Prompt Generator")
+st.write("Click below to get a serendipitous poster idea—styled as a concept card.")
+
+# Poster content lists
 topics = [
     "A social message you care about",
     "An event you’d like to promote",
@@ -40,34 +45,52 @@ topics = [
 ]
 
 tone_prompts = [
-    "Should the poster be loud or quiet?", 
+    "Should the tone be loud or quiet?", 
     "Do you want to make people smile or think?",
     "Should it feel urgent or poetic?",
-    "Is it personal or public?"
+    "Is this message personal or collective?"
 ]
 
 visual_prompts = [
-    "Choose one image you’ve seen recently that stayed in your mind.",
-    "What color do you associate with this message?",
+    "What color or texture fits this idea best?",
     "Would it be more powerful as a photo, a drawing, or something abstract?",
-    "Which part of the city would this poster live in?"
+    "Where in the city would this poster live best?",
+    "Which mood should it evoke at first glance?"
 ]
 
-st.title("🎨 F4 Poster Prompt Generator")
+prompt_builder = [
+    "What is your core message in a sentence?",
+    "Can you write a short prompt for MidJourney to visualize it?",
+    "Is there a reference image, artist, or style you'd like to draw from?",
+    "Try phrasing it like: 'A poster showing [theme] in the style of [reference] --ar 128:89'"
+]
 
-st.write("Click below to get a serendipitous poster idea—styled as a concept card.")
-
-if st.button("Generate Poster Idea"):
+def generate_poster():
     topic = random.choice(topics)
     tone = random.choice(tone_prompts)
     visual = random.choice(visual_prompts)
+    builder = random.choice(prompt_builder)
 
-    st.markdown(f"""
-    <div class="f4-poster-box">
-        <div class="poster-title">🎨 Poster Concept Card</div>
-        <div class="poster-section"><strong>Topic:</strong><br>{topic}</div>
-        <div class="poster-section"><strong>Tone:</strong><br>{tone}</div>
-        <div class="poster-section"><strong>Visual Cue:</strong><br>{visual}</div>
-        <div class="poster-section"><strong>Your Sentence:</strong><br>___________</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("""
+        <div class="poster-box">
+            <div class="poster-section">
+                <div class="poster-label">🧭 Topic:</div>
+                <div class="poster-text">{}</div>
+            </div>
+            <div class="poster-section">
+                <div class="poster-label">🎯 Tone Question:</div>
+                <div class="poster-text">{}</div>
+            </div>
+            <div class="poster-section">
+                <div class="poster-label">🎨 Visual Suggestion:</div>
+                <div class="poster-text">{}</div>
+            </div>
+            <div class="poster-section">
+                <div class="poster-label">🧵 Prompt Seed:</div>
+                <div class="poster-text">{}</div>
+            </div>
+        </div>
+    """.format(topic, tone, visual, builder), unsafe_allow_html=True)
+
+if st.button("Generate Poster Idea"):
+    generate_poster()
