@@ -1,84 +1,73 @@
-
 import streamlit as st
 import random
-from PIL import Image, ImageDraw, ImageFont
-import io
 
-# Set page layout
-st.set_page_config(layout="centered")
+st.set_page_config(layout="centered", page_title="F4 Poster Prompt Generator")
 
-# Poster categories and prompts
-categories = {
-    "Cultural Posters": [
-        "A music festival in your town",
-        "An open studio invitation",
-        "A local film screening on a rooftop"
-    ],
-    "Political Messaging / Referendum": [
-        "A poster for or against a city referendum",
-        "A message about equal rights",
-        "A call to vote for something you believe in"
-    ],
-    "City Announcements & Public Invitations": [
-        "A lost & found city event",
-        "Join your neighbors for an urban dinner",
-        "A poster that announces nothing, but feels like it does"
-    ],
-    "Gender Equality / Inclusion / Care": [
-        "A poster about everyday sexism",
-        "A moment of care in the city",
-        "An invitation to just be safe and seen"
-    ],
-    "Ecological Transitions / Commons": [
-        "A message about shared green space",
-        "A speculative climate future",
-        "A call to save urban trees"
-    ],
-    "Anti-Ad / Media Literacy Posters": [
-        "A poster that makes fun of advertising",
-        "Something that reveals what we don't notice",
-        "An anti-billboard billboard"
-    ],
-    "Dreamlike Urban Scenes": [
-        "A poster from an imagined future",
-        "A silent ritual in a public square",
-        "A floating object appearing above the city"
-    ]
-}
+# HTML & CSS to mimic vertical F4 poster
+st.markdown(
+    """
+    <style>
+    .f4-poster-box {
+        width: 400px;
+        height: 570px;
+        padding: 40px;
+        margin: auto;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        background: #fefefe;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+    .poster-title {
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+    .poster-section {
+        margin-bottom: 15px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-colors = ["#f4e04d", "#f45b69", "#9fedd7", "#a28089", "#4a6fa5", "#ffb627"]
+topics = [
+    "A social message you care about",
+    "An event you’d like to promote",
+    "Something about your city that needs more attention",
+    "A small act of resistance",
+    "A message of joy or connection",
+    "A strange or unexpected urban scene"
+]
 
-# Generate a poster idea
-def generate_poster():
-    category = random.choice(list(categories.keys()))
-    idea = random.choice(categories[category])
-    color = random.choice(colors)
-    return category, idea, color
+tone_prompts = [
+    "Should the poster be loud or quiet?", 
+    "Do you want to make people smile or think?",
+    "Should it feel urgent or poetic?",
+    "Is it personal or public?"
+]
 
-# Draw the poster
-def draw_poster(category, idea, color):
-    img = Image.new('RGB', (768, 512), color=color)
-    draw = ImageDraw.Draw(img)
+visual_prompts = [
+    "Choose one image you’ve seen recently that stayed in your mind.",
+    "What color do you associate with this message?",
+    "Would it be more powerful as a photo, a drawing, or something abstract?",
+    "Which part of the city would this poster live in?"
+]
 
-    try:
-        font_cat = ImageFont.truetype("DejaVuSans-Bold.ttf", 24)
-        font_idea = ImageFont.truetype("DejaVuSans.ttf", 20)
-    except:
-        font_cat = font_idea = None  # fallback in case fonts not available
-
-    draw.text((30, 30), category, fill="black", font=font_cat)
-    draw.text((30, 100), idea, fill="black", font=font_idea)
-
-    return img
-
-# UI
 st.title("🎨 F4 Poster Prompt Generator")
-st.markdown("Click below to get a serendipitous poster idea—styled as a concept card.")
+
+st.write("Click below to get a serendipitous poster idea—styled as a concept card.")
 
 if st.button("Generate Poster Idea"):
-    cat, idea, color = generate_poster()
-    poster = draw_poster(cat, idea, color)
-    buf = io.BytesIO()
-    poster.save(buf, format="PNG")
-    st.image(buf.getvalue(), caption="Your F4 Poster Prompt", use_column_width=True)
-    st.download_button("Download Poster", data=buf.getvalue(), file_name="poster_idea.png", mime="image/png")
+    topic = random.choice(topics)
+    tone = random.choice(tone_prompts)
+    visual = random.choice(visual_prompts)
+
+    st.markdown(f"""
+    <div class="f4-poster-box">
+        <div class="poster-title">🎨 Poster Concept Card</div>
+        <div class="poster-section"><strong>Topic:</strong><br>{topic}</div>
+        <div class="poster-section"><strong>Tone:</strong><br>{tone}</div>
+        <div class="poster-section"><strong>Visual Cue:</strong><br>{visual}</div>
+        <div class="poster-section"><strong>Your Sentence:</strong><br>___________</div>
+    </div>
+    """, unsafe_allow_html=True)
